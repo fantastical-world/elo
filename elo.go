@@ -41,22 +41,3 @@ func (e *ELOCalculator) ExpectedScores(playerA, playerB *Player) (float64, float
 
 	return math.Round(scoreA*100) / 100, math.Round(scoreB*100) / 100
 }
-
-//Player represents a player, their rating, and play history.
-type Player struct {
-	rating  float64
-	kfactor float64
-}
-
-func NewPlayer(rating, kfactor float64) *Player {
-	p := &Player{rating: rating, kfactor: kfactor}
-	return p
-}
-
-func (p *Player) Rating() float64 {
-	return p.rating
-}
-
-func (p *Player) CalculateNewRating(expectedScore, actualScore float64) {
-	p.rating = p.rating + math.Round((p.kfactor * (actualScore - expectedScore)))
-}
