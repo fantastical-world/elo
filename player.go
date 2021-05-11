@@ -15,6 +15,11 @@ func NewPlayer(rating, kfactor float64) *Player {
 	return p
 }
 
+func NewPlayerUSCF(rating float64) *Player {
+	p := &Player{rating: rating, kfactor: USCFKFactorFromRating(rating)}
+	return p
+}
+
 func (p *Player) Rating() float64 {
 	return p.rating
 }

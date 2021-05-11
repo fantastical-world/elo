@@ -10,6 +10,14 @@ func TestCalculateNewRating(t *testing.T) {
 	}
 }
 
+func TestCalculateNewRatingWithUCSF(t *testing.T) {
+	p := NewPlayerUSCF(1613)
+	p.CalculateNewRating(2.88, 2.5)
+	if p.Rating() != 1601 {
+		t.Errorf("expected rating to be 1601, actual %f\n", p.Rating())
+	}
+}
+
 func TestCalculateNewRatingDeep(t *testing.T) {
 	elo := ELOCalculator{}
 	player := NewPlayer(1613, 32)
