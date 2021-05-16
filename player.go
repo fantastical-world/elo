@@ -6,24 +6,25 @@ import (
 
 //Player represents a player, their rating, and play history.
 type Player struct {
-	rating  float64
+	rating  int
 	kfactor float64
 }
 
-func NewPlayer(rating, kfactor float64) *Player {
+func NewPlayer(rating int, kfactor float64) *Player {
 	p := &Player{rating: rating, kfactor: kfactor}
 	return p
 }
 
-func NewPlayerUSCF(rating float64) *Player {
+func NewPlayerUSCF(rating int) *Player {
 	p := &Player{rating: rating, kfactor: USCFKFactorFromRating(rating)}
 	return p
 }
 
-func (p *Player) Rating() float64 {
+func (p *Player) Rating() int {
 	return p.rating
 }
 
 func (p *Player) CalculateNewRating(expectedScore, actualScore float64) {
-	p.rating = p.rating + math.Round((p.kfactor * (actualScore - expectedScore)))
+	value := math.Round((p.kfactor * (actualScore - expectedScore)))
+	p.rating = p.rating + int(value)
 }

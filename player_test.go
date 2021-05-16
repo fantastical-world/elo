@@ -6,7 +6,7 @@ func TestCalculateNewRating(t *testing.T) {
 	p := NewPlayer(1613, 32)
 	p.CalculateNewRating(2.88, 2.5)
 	if p.Rating() != 1601 {
-		t.Errorf("expected rating to be 1601, actual %f\n", p.Rating())
+		t.Errorf("expected rating to be 1601, actual %d\n", p.Rating())
 	}
 }
 
@@ -14,7 +14,7 @@ func TestCalculateNewRatingWithUCSF(t *testing.T) {
 	p := NewPlayerUSCF(1613)
 	p.CalculateNewRating(2.88, 2.5)
 	if p.Rating() != 1601 {
-		t.Errorf("expected rating to be 1601, actual %f\n", p.Rating())
+		t.Errorf("expected rating to be 1601, actual %d\n", p.Rating())
 	}
 }
 
@@ -37,7 +37,7 @@ func TestCalculateNewRatingDeep(t *testing.T) {
 
 	t.Run("validate new rating based on actual score...", func(t *testing.T) {
 		if player.Rating() != 1601 {
-			t.Errorf("expected rating to be 1601, actual %f\n", player.Rating())
+			t.Errorf("expected rating to be 1601, actual %d\n", player.Rating())
 		}
 	})
 }

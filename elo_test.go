@@ -5,8 +5,8 @@ import (
 )
 
 func TestExpectedScores(t *testing.T) {
-	playerOne := NewPlayer(2300.00, 32)
-	playerTwo := NewPlayer(2200.00, 32)
+	playerOne := NewPlayer(2300, 32)
+	playerTwo := NewPlayer(2200, 32)
 	e := ELOCalculator{}
 	scoreOne, scoreTwo := e.ExpectedScores(playerOne, playerTwo)
 
@@ -20,8 +20,8 @@ func TestExpectedScores(t *testing.T) {
 }
 
 func TestExpectedScoresEquallyMatched(t *testing.T) {
-	playerOne := NewPlayer(2300.00, 32)
-	playerTwo := NewPlayer(2300.00, 32)
+	playerOne := NewPlayer(2300, 32)
+	playerTwo := NewPlayer(2300, 32)
 	e := ELOCalculator{}
 	scoreOne, scoreTwo := e.ExpectedScores(playerOne, playerTwo)
 

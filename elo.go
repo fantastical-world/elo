@@ -36,8 +36,8 @@ func (e *ELOCalculator) Score(wins, draws, losses int) float64 {
 
 //ExpectedScores will calculate the expected scores of two players based on their ratings.
 func (e *ELOCalculator) ExpectedScores(playerA, playerB *Player) (float64, float64) {
-	scoreA := 1 / (1 + math.Pow(10, ((playerB.Rating()-playerA.Rating())/400)))
-	scoreB := 1 / (1 + math.Pow(10, ((playerA.Rating()-playerB.Rating())/400)))
+	scoreA := 1 / (1 + math.Pow(10, ((float64(playerB.Rating())-float64(playerA.Rating()))/400)))
+	scoreB := 1 / (1 + math.Pow(10, ((float64(playerA.Rating())-float64(playerB.Rating()))/400)))
 
 	return math.Round(scoreA*100) / 100, math.Round(scoreB*100) / 100
 }

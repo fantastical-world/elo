@@ -1,7 +1,7 @@
 package elo
 
 //USCFKFactorFromRating provides a kfactor from a player's rating.
-func USCFKFactorFromRating(rating float64) float64 {
+func USCFKFactorFromRating(rating int) float64 {
 	if rating < 2100 {
 		return 32
 	}
