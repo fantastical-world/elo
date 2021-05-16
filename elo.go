@@ -4,40 +4,54 @@ import (
 	"math"
 )
 
-const (
-	//Scores awarded for win, lose, or draw.
-	win  = 1.0
-	draw = 0.5
-	loss = 0.0
-)
-
 //ELOCalculator will calculate player scores, and provides kfactors to be used by players.
 type ELOCalculator struct {
+	kfactor float64
+}
+
+func New(kfactor float64) ELOCalculator {
+	return ELOCalculator{kfactor: kfactor}
+}
+
+//SetKFactor sets the kfactor used when calculating a new rating.
+func (e *ELOCalculator) SetKFactor(k float64) {
+	e.kfactor = k
 }
 
 //Score calculates a score based on wins, draws, and losses.
 func (e *ELOCalculator) Score(wins, draws, losses int) float64 {
-	score := 0.00
-
-	if wins > 0 {
-		score += (float64(wins) * win)
-	}
-
-	if draws > 0 {
-		score += (float64(draws) * draw)
-	}
-
-	if losses > 0 {
-		score += (float64(losses) * loss)
-	}
-
-	return score
+	//technically we don't need to include losses at all since it will always be 0.
+	return (float64(wins) * 1.0) + (float64(draws) * 0.5) + (float64(losses) * 0.0)
 }
 
 //ExpectedScores will calculate the expected scores of two players based on their ratings.
-func (e *ELOCalculator) ExpectedScores(playerA, playerB *Player) (float64, float64) {
-	scoreA := 1 / (1 + math.Pow(10, ((float64(playerB.Rating())-float64(playerA.Rating()))/400)))
-	scoreB := 1 / (1 + math.Pow(10, ((float64(playerA.Rating())-float64(playerB.Rating()))/400)))
+func (e *ELOCalculator) ExpectedScores(ratingA, ratingB int) (float64, float64) {
+	scoreA := 1 / (1 + math.Pow(10, ((float64(ratingB)-float64(ratingA))/400)))
+	scoreB := 1 / (1 + math.Pow(10, ((float64(ratingA)-float64(ratingB))/400)))
 
 	return math.Round(scoreA*100) / 100, math.Round(scoreB*100) / 100
+}
+
+func (e *ELOCalculator) CalculateNewRating(rating int, expectedScore, actualScore float64) int {
+	value := math.Round((e.kfactor * (actualScore - expectedScore)))
+	return rating + int(value)
+}
+
+//added these to elo calculator from standalone, where used when creating players
+//SetKFactorFromRating sets kfactor from a rating.
+func (e *ELOCalculator) SetKFactorFromRating(rating int) {
+	if rating < 2100 {
+		e.kfactor = 32
+		return
+	}
+	if rating > 2400 {
+		e.kfactor = 16
+		return
+	}
+	e.kfactor = 24
+}
+
+//SetKFactorFromGamesPlayed sets kfactor from the amount of games played previously, and today.
+func (e *ELOCalculator) SetKFactorFromGamesPlayed(pp, pt int) {
+	e.kfactor = 800 / float64(pp+pt)
 }
