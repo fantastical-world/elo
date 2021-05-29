@@ -1,37 +1,32 @@
-# Makefile for dice package
+# Makefile for elo package
 BRANCH_NAME := $(shell git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/')
 BUILD_COMMIT := $(shell git describe --tags --always --dirty --all --match=v*)
 BUILD_DATE := $(shell date -u +%b-%d-%Y,%T-UTC)
 BUILD_SEMVER := $(shell cat .SEMVER)
 
-.PHONY: all build clean help release test dirty-check tidy
+.PHONY: all build clean help release test dirty-check
 
 # target: all - default target, will trigger build
 all: build
 
 # target: build - runs build for local os/arch
 build:
-	CGO_ENABLED=0 go build -ldflags "-X main.buildBranch=$(BRANCH_NAME) -X main.buildCommit=$(BUILD_COMMIT) -X main.buildDate=$(BUILD_DATE) -X main.semVer=$(BUILD_SEMVER)" .
+	go build ./...
 
-# target: clean - removes artifacts from tests, build, and install
+# target: clean - removes artifacts from tests
 clean:
 	-rm -rf results
-	go clean -i
 
-# target: release - will clean, build, and finally creates a git tag for the version
-release: dirty-check clean test
+# target: release - will clean, build, test, and finally creates a git tag for the version
+release: dirty-check clean build test
 	git tag v$(BUILD_SEMVER) $(BUILD_COMMIT)
 	git push origin v$(BUILD_SEMVER)
 
 # target: test - runs tests and generates coverage reports
 test:
 	mkdir -p results
-	go test -cover -coverprofile=results/c.out
-	go tool cover -html=results/c.out -o results/coverage.html
-
-# target: tidy - runs go mod tidy
-tidy:
-	go mod tidy
+	go test -cover -coverprofile=results/tc.out
+	go tool cover -html=results/tc.out -o results/coverage.html
 
 # target: dirty-check - will check if repo is dirty
 dirty-check:
