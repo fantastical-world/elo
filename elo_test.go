@@ -12,8 +12,8 @@ func Test_New(t *testing.T) {
 		}
 	})
 }
-func TestELOCalculator_ExpectedScores(t *testing.T) {
-	e := ELOCalculator{}
+func TestCalculator_ExpectedScores(t *testing.T) {
+	e := Calculator{}
 	t.Run("validate scores are correct for players with different ratings...", func(t *testing.T) {
 		playerOne, playerTwo := 2300, 2200
 		scoreOne, scoreTwo := e.ExpectedScores(playerOne, playerTwo)
@@ -34,8 +34,8 @@ func TestELOCalculator_ExpectedScores(t *testing.T) {
 	})
 }
 
-func TestELOCalculator_Score(t *testing.T) {
-	e := ELOCalculator{}
+func TestCalculator_Score(t *testing.T) {
+	e := Calculator{}
 	t.Run("validate score for 3 wins, 1 draw, and 1 loss...", func(t *testing.T) {
 		score := e.Score(3, 1, 1)
 		if score != 3.5 {
@@ -58,8 +58,8 @@ func TestELOCalculator_Score(t *testing.T) {
 	})
 }
 
-func TestELOCalculator_SetKFactorFromRating(t *testing.T) {
-	e := ELOCalculator{}
+func TestCalculator_SetKFactorFromRating(t *testing.T) {
+	e := Calculator{}
 	t.Run("validate kfactor for rating below 2100...", func(t *testing.T) {
 		e.SetKFactorFromRating(2000)
 		if e.kfactor != 32 {
@@ -82,8 +82,8 @@ func TestELOCalculator_SetKFactorFromRating(t *testing.T) {
 	})
 }
 
-func TestELOCalculator_SetKFactorFromGamesPlayed(t *testing.T) {
-	e := ELOCalculator{}
+func TestCalculator_SetKFactorFromGamesPlayed(t *testing.T) {
+	e := Calculator{}
 	t.Run("validate kfactor from rating based on 30 games previously played, and 5 played today...", func(t *testing.T) {
 		e.SetKFactorFromGamesPlayed(30, 5)
 		if e.kfactor != 22.857142857142858 {
@@ -92,11 +92,11 @@ func TestELOCalculator_SetKFactorFromGamesPlayed(t *testing.T) {
 	})
 }
 
-func TestELOCalculator_CalculateNewRating(t *testing.T) {
-	e := ELOCalculator{}
+func TestCalculator_NewRating(t *testing.T) {
+	e := Calculator{}
 	t.Run("validate rating drops if score is lower than expected...", func(t *testing.T) {
 		e.SetKFactor(32)
-		rating := e.CalculateNewRating(1613, 2.88, 2.5)
+		rating := e.NewRating(1613, 2.88, 2.5)
 		if rating != 1601 {
 			t.Errorf("expected rating to be 1601, actual %d\n", rating)
 		}
@@ -104,7 +104,7 @@ func TestELOCalculator_CalculateNewRating(t *testing.T) {
 
 	t.Run("validate rating increases if score is higher than expected...", func(t *testing.T) {
 		e.SetKFactor(32)
-		rating := e.CalculateNewRating(1613, 2.0, 2.5)
+		rating := e.NewRating(1613, 2.0, 2.5)
 		if rating != 1629 {
 			t.Errorf("expected rating to be 1629, actual %d\n", rating)
 		}
@@ -112,7 +112,7 @@ func TestELOCalculator_CalculateNewRating(t *testing.T) {
 
 	t.Run("validate rating stays the same if score is the same as expected...", func(t *testing.T) {
 		e.SetKFactor(32)
-		rating := e.CalculateNewRating(1613, 2.88, 2.88)
+		rating := e.NewRating(1613, 2.88, 2.88)
 		if rating != 1613 {
 			t.Errorf("expected rating to be 1613, actual %d\n", rating)
 		}
@@ -120,7 +120,7 @@ func TestELOCalculator_CalculateNewRating(t *testing.T) {
 }
 
 func Test_Simulated(t *testing.T) {
-	elo := ELOCalculator{}
+	elo := Calculator{}
 	t.Run("validate rating drops if score is lower than expected...", func(t *testing.T) {
 		playerRating := 1613
 		elo.SetKFactorFromRating(playerRating)
@@ -136,7 +136,7 @@ func Test_Simulated(t *testing.T) {
 		s, _ = elo.ExpectedScores(playerRating, 1720)
 		expectedScore += s
 		actualScore := elo.Score(2, 1, 2)
-		rating := elo.CalculateNewRating(playerRating, expectedScore, actualScore)
+		rating := elo.NewRating(playerRating, expectedScore, actualScore)
 		if rating != 1601 {
 			t.Errorf("expected rating to be 1601, actual %d\n", rating)
 		}
