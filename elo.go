@@ -1,5 +1,5 @@
 /*
-Package elo provides ELOCalculator which can be used to calculate skill levels.
+Package elo provides ELOCalculator which can be used to calculate player skill levels.
 */
 package elo
 
