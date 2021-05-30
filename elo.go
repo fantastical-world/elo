@@ -6,14 +6,13 @@ Any constraints should be implemented elsewhere. This package simply calculates 
 on the values provided for a "player's" current rating, expected score, and actual score. The only
 configurable value for fine tuning the calculated rating is the kfactor. The kfactor can be set to
 any value you desire, the logic for determining a kfactor is left to the user of this package.
-Although two common kfactor calculators are provided for convience, but they are very simple in their
+Although two common kfactor calculators are provided for convenience, but they are very simple in their
 implementation.
 
-Convience methods are provided for calculating an actual score, and an expected score. The actual score is
-based on the number of wins, losses, or draws over all the "games" played in the current "event". To calculate
-an "expected" score two ratings are needed, this typically represents a player vs. player score. The calculator will return
-the "expected" score for both players. This allows for recording the outcome of a single game, or tracking multiple
-games and players in an event.
+Convenience methods are provided for calculating an actual score, and an expected score. The actual score is
+based on the player's number of wins, losses, or draws over all the "games" played in the current "event". To calculate
+an "expected" score two player ratings are needed, these would be the players who will compete against each other.
+The calculator will return the "expected" score for both players. This can be repeated for each game played.
 */
 package elo
 
